@@ -10,5 +10,8 @@ In the event the dataset in use has double headings, this feature will be useful
 
 Upon running the function, the user would receive csv files:
   - A cleaned version of the data (in the event there were empty rows and columns)
-  - A CSV file containing the empty rows
+  - A CSV file containing the empty rows (if any)
   - A CSV file containing the empty columns (if any)
+
+
+Enjoy!
