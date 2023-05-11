@@ -1,0 +1,295 @@
+  Cross Duplicates UI
+    tags$div(
+      class="CrossDuplicates", id="CrossDuplicates",
+      
+      tags$div(class="cross_sidebar", id="cross_sidebar",
+        tags$img(class="logo", src="img/logo.png"),
+        tags$p(class="cc", "by Nana Parker"),
+        tags$div(class="line"),
+        numericInput(inputId = "ColumnRemovalA", "File 1 Columns", 1, min = 1, max=10),
+        numericInput(inputId = "ColumnRemovalB", "File 1 Columns", 1, min = 1, max=10),
+        numericInput(inputId = "ColumnRemovalC", "File 2 Columns", 1, min = 1, max=10),
+        numericInput(inputId = "ColumnRemovalD", "File 2 Columns", 1, min = 1, max=10),
+        uiOutput("results"),
+        actionButton("cross_submitButton", "Select", class="submit-btn")
+      ),
+      
+      tags$div(class="cross_grid", id="cross_grid",
+        tags$img(class="up-logo", src="img/cloud.png"),
+        tags$p(class="txt1", "Drag and drop file here"),
+        tags$p(class="txt2", "or"),
+        fileInput('datafiles',label = "", buttonLabel = "Browse",
+                 accept=c('text/csv', 'text/comma-separated-values,text/plain'))              
+      ),
+      
+      tags$div(class="cross_finalGrid", id="cross_finalGrid",
+        downloadButton("cross_button1", "One Company with Two IDs"),
+        downloadButton("cross_button2", "Two Companies with One ID")
+      )
+    ),
+    
+    
+    
+    
+    --------- Data Cleaner UI
+    tags$div(
+      class="DataCleaner", id="DataCleaner",
+      tags$div(
+        class="sidebar", id="sidebar",
+        tags$img(class="logo", src="img/logo.png"),
+        tags$p(class="cc", "by Nana Parker"),
+        tags$div(class="line"),
+        radioButtons(inputId = 'select', label = 'Select the row to be removed', choices = c(None='0',First='1'), selected = '0'),
+        numericInput(inputId = "ColumnRemoval1", "Columns to scan", 1, min = 1, max=10),
+        numericInput(inputId = "ColumnRemoval2", "Columns to scan", 1, min = 1, max=10),
+        uiOutput("tables"),
+        actionButton("submitButton", "Select", class="submit-btn")
+      ),
+      
+      tags$div(
+        class="grid", id="grid",
+        tags$img(class="up-logo", src="img/cloud.png"),
+        tags$p(class="txt1", "Drag and drop file here"),
+        tags$p(class="txt2", "or"),
+        fileInput('datafile',label = "", buttonLabel = "Browse",
+                  accept=c('text/csv', 'text/comma-separated-values,text/plain'))
+      ),
+      
+      fluidRow(
+        class="finalGrid", id="finalGrid",
+        downloadButton("emptyRows", "Empty Rows"),
+        downloadButton("emptyColumns", "Empty Columns"),
+        downloadButton("cleanData", "Clean Data")
+      ),
+      
+      fluidRow(
+        id="DuplicatedGrid", class="DuplicatedGrid",
+        downloadButton("repIDs", "Repeated IDs"),
+        downloadButton("repComps", "Repeated Companies"),
+        downloadButton("repCompsDiffIds", "Repeated Companies with Different IDs")
+      ),
+      
+      tags$script(src="draganddrop.js")
+    )
+    
+    
+--- Data Cleaner Server Side
+  # Hiding the 'finalGrid' and 'DuplicatedGrid' div until it is needed
+  shinyjs::hide(id="finalGrid")
+  shinyjs::hide(id="DuplicatedGrid")
+  
+  # Waiting until a file has been uploaded and the 'Submit' button has been 
+  # pressed to take action
+  observeEvent(input$datafile, {
+    start <- eventReactive(input$submitButton, {
+      if(is.null(input$datafile)){return ()}    # If no file has been uploaded, nothing happens
+      else {
+        filename<- input$datafile$name
+        dataset <- tbl_df(read_csv(input$datafile$datapath, locale = locale(encoding = "Latin1")))
+        index <- c()
+        emptyRows_identity <- c()
+        emptyRows_List <- list()
+        
+        # Replace empty spaces with 'NA' values 
+        dataset[dataset == "" | dataset == "N/A"] <- NA  
+        
+        
+        # --------------------- Duplicate Checker ---------------------- #
+        # Checking for Repeating IDs
+        dupli_range <- (duplicated(dataset[, 1]) | duplicated(dataset[, 1], fromLast = TRUE))
+        
+        print(sum(dupli_range))
+        if (sum(dupli_range) > 0){
+          repeatedRows <- dataset[dupli_range, ]
+          
+          output$repIDs <- downloadHandler(
+            filename = function() {
+              paste("Repeated CRM IDs in ", filename, sep="")
+            },
+            content = function(file) {
+              write.csv(repeatedRows, file, row.names=FALSE)
+            }
+          )
+        } else {
+          shinyjs::hide("repIDs")
+        }
+        
+        # Comparing the Columns selected plus the 4th
+        dupli_range1 <- (duplicated(dataset[, input$ColumnRemoval1]) | duplicated(dataset[, input$ColumnRemoval1], fromLast = TRUE)) & (duplicated(dataset[, input$ColumnRemoval2]) | duplicated(dataset[, input$ColumnRemoval2], fromLast = TRUE)) & (duplicated(dataset[, 4]) | duplicated(dataset[, 4], fromLast = TRUE))
+        
+        print(sum(dupli_range1))
+        if (sum(dupli_range1) > 0){
+          
+          repeatedRows1 <- dataset[dupli_range1, ]
+          
+          output$repComps <- downloadHandler(
+            filename = function() {
+              paste("Repeated Companies in ", filename, sep = "")
+            },
+            content = function(file) {
+              write.csv(repeatedRows1, file, row.names = FALSE)
+            }
+          )
+        } else {
+          shinyjs::hide("repComps")
+        }
+        
+        # Comparing the Columns selected
+        dupli_range2 <- (duplicated(dataset[, input$ColumnRemoval2]) | duplicated(dataset[, input$ColumnRemoval2], fromLast = TRUE)) & !(duplicated(dataset[, input$ColumnRemoval1]) | duplicated(dataset[ , input$ColumnRemoval1], fromLast = TRUE))
+        print(sum(dupli_range2))
+        if (sum(dupli_range2) > 0){
+          
+          repeatedRows2 <- dataset[dupli_range2, ]
+          
+          output$repCompsDiffIds <- downloadHandler(
+            filename = function() {
+              paste("Repeated Companies with different IDs in ", filename, sep = "")
+            },
+            content = function(file) {
+              write.csv(repeatedRows2, file, row.names = FALSE)
+            }
+          )
+          print(filename)
+        } else {
+          shinyjs::hide("repCompsDiffIds")
+        }
+        
+        
+        
+        # --------------------- Empty Column Removal ---------------------- #
+        
+        # User giving the option to remove the first row or not
+        if(input$select == "1")
+          dataset <- dataset[-1, ]
+        
+        shinyjs::hide(id="grid")
+        shinyjs::show(id="finalGrid")
+        shinyjs::show(id="DuplicatedGrid")
+        
+        # Finding all columns with NA's or empty strings
+        allmissedcols <- sapply(dataset, function(x) all(is.na(x) | x == "" ))
+      
+        if(sum(allmissedcols) > 0){
+          empty_cols <- names(allmissedcols[allmissedcols != FALSE])
+          dataset <- select(dataset, -empty_cols)
+          
+          # Write to 'txt' for columns
+          output$emptyColumns <- downloadHandler(
+            filename = function() {
+              paste("empty columns of ", filename, sep="")
+            },
+            content = function(file) {
+              write.csv(empty_cols, file, row.names = FALSE)
+            }
+          )
+        } else {
+          shinyjs::hide(id="emptyColumns")
+        }
+        
+        
+        
+        # --------------------- Empty Row Removal ---------------------- #
+        
+        # Finding rows with half or more of its columns being unfilled
+        for(i in 1:nrow(dataset)){
+          new_count <- 0
+          missing <- c()
+          emptyRows <- c()
+          
+          for (p in 1:ncol(dataset)) {
+            if(is.na(dataset[i, p])) {
+              missing <- append(missing, names(dataset[i, p]))
+              new_count <- new_count + 1
+            }
+          }
+          
+          # If a particular row has half of its columns empty it will be removed
+          if(new_count > (ncol(dataset) / 2) - 1){
+            index <- append(index, i)
+            
+            emptyRows_identity <- append(emptyRows_identity, dataset[[i, 1]])
+            maxLength <- length(names(dataset))
+            emptyRows <- c(missing, rep("", maxLength - length(missing)))
+            emptyRows_List[[length(emptyRows_List) + 1]] <- emptyRows
+          }
+        }
+        
+        names(emptyRows_List) <- emptyRows_identity
+        emptyRowsData <- data.frame(emptyRows_List, check.names = FALSE)
+        
+        if (length(emptyRows_List) <= 1){
+          shinyjs::hide("emptyRows")
+        }else {
+          # Write txt for rows
+          output$emptyRows <- downloadHandler(
+            filename = function() {
+              paste("empty rows of ", filename, sep="")
+            },
+            content = function(file) {
+              write.csv(emptyRowsData, file, row.names = FALSE)
+            }
+          )
+          
+          dataset <- dataset[-index, ]
+          
+          
+          
+          # --------------------- Clean Data Acquisition ---------------------- #
+          
+          # If dataset does not have an existing ID structure, one is provided
+          
+          if(!("ID" %in% colnames(dataset)) | !("id" %in% colnames(dataset))){
+            id <- c(seq(nrow(dataset)))
+            dataset <- dataset %>% mutate(ID = id) %>% select(ID, everything())
+          }
+        }
+        
+        # Write clean data to csv
+        output$cleanData <- downloadHandler(
+          filename = function() {
+            paste("clean", filename, sep="_")
+          },
+          content = function(file) {
+            write.csv(dataset, file, row.names = FALSE)
+          }
+        )
+      }
+      
+    })
+    
+    output$tables <- renderUI({
+      start()
+    })
+    
+  })
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+--- Cross Duplicates Server Side
+  observeEvent(input$crossDuplicate, {
+    shinyjs::show(id="CrossDuplicates")
+    observeEvent(input$datafiles, {
+      continue <- eventReactive(input$cross_submitButton, {
+        if(is.null(input$datafiles)){return ()}    # If no file has been uploaded, nothing happens
+        
+      })
+      
+      output$results <- renderUI({
+        continue()
+      })
+      
+    })   
+  })
+  
+  
+---- Server Initial code
+  shinyjs::hide(id="DataCleaner")
+  shinyjs::hide(id="CrossDuplicates")

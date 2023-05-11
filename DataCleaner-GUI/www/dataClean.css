@@ -1,0 +1,560 @@
+* {
+    margin: 0;
+    padding: 0;
+    font-family: sans-serif;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 18px;
+    line-height: 22px;
+    overflow: hidden;
+}
+
+.bkg {
+    background: rgba(233, 233, 233, 0.27);
+    position: relative;
+    width: 1440px;
+    height: 100vh;
+    color: blue;
+}
+
+
+
+/* --- MAIN MENU COMPONENTS --- */
+#mainMenu{
+    position: absolute;
+    width: 100vw;
+    height: 100vh;
+    color: green;  
+}
+
+.main-logo {
+  position: absolute;
+  width: 590px;
+  height: 690px;
+  left: 30%;
+  top: -10%;
+}
+
+#crossDuplicate {
+  position: absolute;
+  width: 240px;
+  height: 65px;
+  top: 70%;
+  left: 31%;
+  
+  border: none;
+  background: rgba(45, 128, 204, 0.81);
+  text-decoration: none;
+  color: #fff; 
+  
+  cursor: pointer;
+}
+
+#crossDuplicate:hover{
+    background: rgba(34, 95, 151, 0.81);
+}
+
+#dataCleaner{
+  position: absolute;
+  width: 240px;
+  height: 65px;
+  top: 70%;
+  left: 53.2%;
+  
+  border: none;
+  background: rgba(45, 128, 204, 0.81);
+  text-decoration: none;
+  color: #fff; 
+  
+  cursor: pointer;
+}
+
+#dataCleaner:hover{
+    background: rgba(34, 95, 151, 0.81);
+}
+
+
+/* --- CROSS DUPLICATES SECTION --- */
+.cross_sidebar {
+    width: 272px;
+    height: 100vh;
+    background-color: white;
+    display: flex;
+}
+
+.cross_grid {
+    border: 5px dashed rgba(119, 119, 119, 0.4);
+    position: absolute;
+    width: 944px;
+    height: 500px;
+    left: 384px;
+    top: 101px;
+    color: rgba(119, 119, 119, 0.4);
+}
+
+.cross_grid.dragover {
+    border-color: #000;
+    color: #000;
+}
+
+#cross_finalGrid {
+    position: absolute;
+    width: 944px;
+    height: 500px;
+    left: 384px;
+    top: 101px;
+    color: rgba(119, 119, 119, 0.4);
+}
+
+#ColumnRemovalA-label {
+  font-size: 16px;
+  color: #777;
+  
+  position: absolute;
+  top: 52%;
+  left: 5%;
+}
+
+#ColumnRemovalA {
+  visibility: visible !important;
+  width: 42px !important;
+  height: 20px !important;
+  
+  position: absolute;
+  top: 59%;
+  left: 6%;
+}
+
+#ColumnRemovalB-label {
+  font-size: 16px;
+  color: #777;
+  
+  position: absolute;
+  top: 52%;
+  left: 5%;
+}
+
+#ColumnRemovalB {
+  visibility: visible !important;
+  width: 42px !important;
+  height: 20px !important;
+  
+  position: absolute;
+  top: 59%; /*-3*/
+  left: 10%;
+}
+
+#ColumnRemovalC-label {
+  font-size: 16px;
+  color: #777;
+  
+  position: absolute;
+  top: 72%;
+  left: 5%;
+}
+
+#ColumnRemovalC {
+  visibility: visible !important;
+  width: 42px !important;
+  height: 20px !important;
+  
+  position: absolute;
+  top: 79%;
+  left: 6%;
+}
+
+#ColumnRemovalD-label {
+  font-size: 16px;
+  color: #777;
+  
+  position: absolute;
+  top: 72%;
+  left: 5%;
+}
+
+#ColumnRemovalD {
+  visibility: visible !important;
+  width: 42px !important;
+  height: 20px !important;
+  
+  position: absolute;
+  top: 79%; /*-3*/
+  left: 10%;
+}
+
+.cross_dataset {
+    position: absolute;
+    top: 168px;
+    width: 272px;
+    height: 10vh;
+    background: white;
+}
+.cross_dataset2 {
+    position: absolute;
+    top: 229px;
+    width: 272px;
+    height: 10vh;
+    background: white;
+}
+
+#cross_button1, #cross_button2{
+  position: absolute;
+  top: 45%;
+  padding: 25px;
+  background: rgba(45, 128, 204, 0.81);
+  text-decoration: none;
+  color: #fff; 
+}
+
+#cross_button1{
+  left: 0%;
+}
+
+#cross_button2 {
+  left: 75%;
+}
+
+#cross_button1:hover, #cross_button1:hover{
+    background: rgba(34, 95, 151, 0.81);
+}
+
+
+/* --- MAIN DIV COMPONENTS --- */
+.grid {
+    border: 5px dashed rgba(119, 119, 119, 0.4);
+    position: absolute;
+    width: 944px;
+    height: 500px;
+    left: 384px;
+    top: 101px;
+    color: rgba(119, 119, 119, 0.4);
+}
+
+.grid.dragover {
+    border-color: #000;
+    color: #000;
+}
+
+.sidebar {
+    width: 272px;
+    height: 100vh;
+    background: white;
+    display: flex;
+}
+
+#finalGrid {
+    position: absolute;
+    width: 944px;
+    height: 500px;
+    left: 384px;
+    top: 101px;
+    color: rgba(119, 119, 119, 0.4);
+}
+
+
+#DuplicatedGrid {
+    position: absolute;
+    width: 944px;
+    height: 360px;
+    left: 384px;
+    top: 71%;
+    color: rgba(119, 119, 119, 0.4);
+}
+
+
+/* --- INTERNAL COMPONENTS FOR BAR DIV --- */
+.line {
+    position: absolute;
+    width: 272px;
+    height: 0px;
+    left: 0;
+    top: 165px;
+
+    border: 1px solid #9B9B9B;
+    transform: rotate(-179.79deg);
+}
+
+.logo {
+    position: absolute;
+    width: 151px;
+    height: 200px;
+    left: 56px;
+    top: -3%;
+}
+
+.cc {
+  font-size: 12px;
+  font-weight: lighter;
+  color: #2d80cc;
+  
+  position: absolute;
+  top: 18%;
+  left: 6%;
+  
+}
+
+#ColumnRemoval1-label {
+  font-size: 16px;
+  color: #777;
+  
+  position: absolute;
+  top: 72%;
+  left: 5%;
+}
+
+#ColumnRemoval1 {
+  visibility: visible !important;
+  width: 42px !important;
+  height: 20px !important;
+  
+  position: absolute;
+  top: 79%;
+  left: 6%;
+}
+
+#ColumnRemoval2-label {
+  font-size: 16px;
+  color: #777;
+  
+  position: absolute;
+  top: 72%;
+  left: 5%;
+}
+
+#ColumnRemoval2 {
+  visibility: visible !important;
+  width: 42px !important;
+  height: 20px !important;
+  
+  position: absolute;
+  top: 79%; /*-3*/
+  left: 10%;
+}
+
+#tables {
+    position: absolute;
+    top: 100%;
+    width: 272px;
+    height: 20vh;
+    background: white;
+}
+
+.submit-btn {
+    position: absolute;
+    width: 100px;
+    height: 45px;
+    top: 90%;
+    left: 6%;
+
+    border: none;
+    background: rgba(45, 128, 204, 0.81);
+    text-decoration: none;
+    color: #fff; 
+
+    cursor: pointer;
+}
+
+.submit-btn:hover {
+    background: rgba(34, 95, 151, 0.81);
+}
+
+#select{
+  position: absolute;
+  padding-left: 3px;
+  border: 1px solid rgba(119, 119, 119, 0.4);
+  width: 240px !important;
+  height: 125px;
+  top: 50%;
+  left: 1%;
+  font-size: 6px;
+  text-align: justify;
+  line-height: 55px;
+}
+
+#select-label{
+  font-size: 16px;
+  color: #777;
+}
+
+.radio span {
+  line-height: 35px;
+  font-size: 16px;
+  color: #777;
+}
+
+
+
+/* --- INTERNAL COMPONENTS FOR GRID DIV --- */
+.up-logo {
+    position: absolute;
+    width: 148px;
+    height: 98px;
+    left: 43.5%;
+    top: 16%;
+}
+
+.file-btn {
+    position: absolute;
+    width: 100px;
+    height: 45px;
+    top: 70%;
+    left: 46%;
+
+    border: none;
+    background: rgba(45, 128, 204, 0.81);
+    text-decoration: none;
+    color: #fff; 
+
+    cursor: pointer;
+}
+
+.file-btn:hover {
+    background: rgba(34, 95, 151, 0.81);
+}
+
+.txt1, .txt2 {
+    position: absolute;
+    width: 369px;
+    height: 44px;
+    left: 32%;
+    top: 45%;
+
+    font-weight: normal;
+    font-size: 36px;
+    line-height: 44px;
+}
+
+.txt2 {
+    width: 42px;
+    left: 49.5%;
+    top: 56%;
+}
+
+.csv-image {
+    position: absolute; 
+    left: 10%;
+    top: 35%;
+}
+
+.csv-file, #csv-file {
+    position: absolute; 
+    color: #777;
+    left: 25%;
+    top: 40%;
+}
+
+.datasets {
+    position: absolute;
+    top: 170px;
+    width: 272px;
+    height: 20vh;
+    background: white;
+}
+
+.form-control, .input-group, .form-group{
+    width: 940px !important;
+    height: 480px;
+}
+
+.form-control {
+    visibility: hidden;
+}
+
+.input-group-btn {
+    position: absolute;
+    width: 100px;
+    height: 45px;
+    top: 68.5%;
+    left: 46%;
+    cursor: pointer;
+    
+    border: none;
+    background: rgba(45, 128, 204, 0.81);
+    text-decoration: none;
+    color: #fff; 
+}
+
+.btn-file {
+  position: absolute;
+  top: 28%;
+  left: 16.5%;
+}
+
+.input-group-btn:hover {
+    background: rgba(34, 95, 151, 0.81);
+}
+
+
+
+/* --- INTERNAL COMPONENTS FOR FINALGRID DIV --- */
+#emptyRows, #emptyColumns, #cleanData {
+  position: absolute;
+  top: 45%;
+  padding: 25px;
+  background: rgba(45, 128, 204, 0.81);
+  text-decoration: none;
+  color: #fff;
+}
+
+#emptyRows {
+  left: 75%;
+}
+
+#emptyRows:hover{
+    background: rgba(34, 95, 151, 0.81);
+}
+
+#emptyColumns {
+  left: 5%;
+}
+
+#emptyColumns:hover{
+    background: rgba(34, 95, 151, 0.81);
+}
+
+#cleanData {
+  left: 45%;
+}
+
+#cleanData:hover{
+    background: rgba(34, 95, 151, 0.81);
+}
+
+
+
+/* --- INTERNAL COMPONENTS FOR DUPLICATEDGRID DIV --- */
+#repIDs, #repComps, #repCompsDiffIds {
+  position: absolute;
+  top: 45%;
+  padding: 25px;
+  background: rgba(45, 128, 204, 0.81);
+  text-decoration: none;
+  color: #fff;
+}
+
+#repIDs {
+  left: 33.8%;
+  top: 15%;
+}
+
+#repIDs:hover{
+    background: rgba(34, 95, 151, 0.81);
+}
+
+#repComps {
+  left: 5%;
+  top: 15%;
+}
+
+#repComps:hover{
+    background: rgba(34, 95, 151, 0.81);
+}
+
+#repCompsDiffIds {
+  left: 55%;
+  top: 15%;
+}
+
+#repCompsDiffIds:hover{
+    background: rgba(34, 95, 151, 0.81);
+}
